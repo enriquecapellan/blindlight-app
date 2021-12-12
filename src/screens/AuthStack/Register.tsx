@@ -10,26 +10,26 @@ import { onSignIn } from './../../utils/auth';
 
 import { MainNavigationProp } from './../../navigation/types';
 import { MainRoutes } from './../../navigation/routes';
+import { Image } from 'react-native';
 
 type SignInScreenProps = {
   navigation: MainNavigationProp<MainRoutes.SignIn>;
 };
 
 const Register = ({ navigation }: SignInScreenProps) => {
-  const [email, setEmail] = useState('');
-
-  async function register() {
-    
-  }
+  async function register() {}
 
   return (
     <Screen>
-      <Label>Registrarse</Label>
-      <Input
-        value={email}
-        placeholder="Correo electrónico"
-        onChangeText={setEmail}
+      <Image
+        style={{ width: 100, height: 100, marginTop: -50, marginBottom: 20 }}
+        source={require('./../../assets/icon.png')}
       />
+      <Label space={20}>Registrarse</Label>
+      <Input placeholder="Nombre completo" />
+      <Input placeholder="Correo electrónico" />
+      <Input placeholder="Contraseña" />
+      <Input placeholder="Confirmar contraseña" />
       <Button label="Registrarse" type="PRIMARY" onPress={register} />
       <Button
         label="Iniciar Sesión"

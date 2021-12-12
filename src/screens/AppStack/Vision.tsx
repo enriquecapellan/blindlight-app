@@ -13,6 +13,8 @@ import Label from './../../components/label';
 const Vision = () => {
   const [loading, setLoading] = useState(false);
 
+  const [text, setText] = useState('Identificar');
+
   const takePicture = async function (camera: RNCamera) {
     const options = { width: 500, quality: 0.5, base64: true };
     const data = await camera.takePictureAsync(options);
@@ -23,6 +25,7 @@ const Vision = () => {
       file.onloadend = async () => {
         if (typeof file.result == 'string') {
           try {
+            setText('Identificando');
             setLoading(true);
             const descResponse = await describeImage(file.result);
             const description = descResponse.data;
@@ -37,10 +40,13 @@ const Vision = () => {
             text = text && `Texto: ${text}`;
 
             const sentence = `${description}. Objetos: ${labels}. ${text}`;
-            speak(sentence);
+            // setText(sentence);
+            speak(sentence, () => setText('Identificar'));
           } catch (error) {
+            setText('Ha ocurrido un error.');
             console.log(error);
           } finally {
+            setText('Identificar')
             setLoading(false);
           }
         }
@@ -56,9 +62,9 @@ const Vision = () => {
 
   return (
     <Camera>
-      {({ camera, status, recordAudioPermissionStatus }) => (
+      {({ camera }) => (
         <Button disabled={loading} onPress={() => takePicture(camera)}>
-          <Label>{loading ? 'Identificando' : 'Identificar'}</Label>
+          <Label>{text}</Label>
         </Button>
       )}
     </Camera>

@@ -30,4 +30,14 @@ async function login(username: string, password: string) {
   });
 }
 
-export { login, getImageLabels, describeImage, getImageText };
+async function get_nearby_places(lat: number, lon: number) {
+  return axios.get(`${api}/places/nearbyplaces?lat=${lat}&lon=${lon}`);
+}
+
+export {
+  login,
+  getImageLabels,
+  describeImage,
+  getImageText,
+  get_nearby_places,
+};

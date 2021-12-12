@@ -13,9 +13,10 @@ import Settings from './../screens/AppStack/Settings';
 import useAuth from './../hooks/useAuth';
 
 import MainStack, { MainRoutes } from './routes';
+import { Button } from 'react-native';
 
 const SCREENS_OPTIONS = {
-  options: { headerShown: false },
+  options: { headerShown: true, headerShadowVisible: false },
 };
 
 const MainNavigation: React.FC = () => {
@@ -26,16 +27,63 @@ const MainNavigation: React.FC = () => {
       <MainStack.Navigator>
         {isLoggedIn ? (
           <>
-            <MainStack.Screen name={MainRoutes.Home} component={Home} {...SCREENS_OPTIONS} />
-            <MainStack.Screen name={MainRoutes.Vision} component={Vision} {...SCREENS_OPTIONS} />
-            <MainStack.Screen name={MainRoutes.HelpMe} component={HelpMe} {...SCREENS_OPTIONS} />
-            <MainStack.Screen name={MainRoutes.GeoInfo} component={GeoInfo} {...SCREENS_OPTIONS} />
-            <MainStack.Screen name={MainRoutes.Settings} component={Settings} {...SCREENS_OPTIONS} />
+            <MainStack.Screen
+              name={MainRoutes.Home}
+              component={Home}
+              options={{ headerShown: false }}
+            />
+            <MainStack.Screen
+              name={MainRoutes.Vision}
+              component={Vision}
+              options={({ navigation }) => ({
+                title: '',
+                headerBackTitle: 'Volver',
+                headerRight: () => (
+                  <Button
+                    onPress={() => navigation.navigate(MainRoutes.Settings)}
+                    title="Configuración"
+                  />
+                ),
+              })}
+            />
+            <MainStack.Screen
+              name={MainRoutes.HelpMe}
+              component={HelpMe}
+              {...SCREENS_OPTIONS}
+            />
+            <MainStack.Screen
+              name={MainRoutes.GeoInfo}
+              component={GeoInfo}
+              options={{
+                title: 'Lugares Cercanos',
+                headerBackTitle: 'Volver',
+                headerRight: () => (
+                  <Button onPress={() => {}} title="Recargar" />
+                ),
+              }}
+            />
+            <MainStack.Screen
+              name={MainRoutes.Settings}
+              component={Settings}
+              options={{
+                title: 'Configuración',
+                headerBackTitle: 'Volver',
+                headerShadowVisible: false,
+              }}
+            />
           </>
         ) : (
           <>
-            <MainStack.Screen name={MainRoutes.SignIn} component={Login} {...SCREENS_OPTIONS} />
-            <MainStack.Screen name={MainRoutes.SignUp} component={Register} {...SCREENS_OPTIONS}/>
+            <MainStack.Screen
+              name={MainRoutes.SignIn}
+              component={Login}
+              options={{ headerShown: false }}
+            />
+            <MainStack.Screen
+              name={MainRoutes.SignUp}
+              component={Register}
+              options={{ headerShown: false }}
+            />
           </>
         )}
       </MainStack.Navigator>

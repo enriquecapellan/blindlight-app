@@ -5,16 +5,17 @@ import { TouchableWithoutFeedback, Keyboard, View } from 'react-native';
 const Screen: React.FC = ({ children }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <Wrapper>{children}</Wrapper>
+      <ScreenWrapper>{children}</ScreenWrapper>
     </TouchableWithoutFeedback>
   );
 };
 
-const Wrapper = styled(View)`
+export const ScreenWrapper = styled(View)`
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: white;
 `;
 
 export default Screen;

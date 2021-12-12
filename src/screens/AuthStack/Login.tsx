@@ -12,6 +12,7 @@ import useAuth from './../../hooks/useAuth';
 
 import { signIn } from './../../context/auth';
 import { isLoggedIn } from './../../utils/auth';
+import { Image } from 'react-native';
 
 type SignInScreenProps = {
   navigation: MainNavigationProp<MainRoutes.SignIn>;
@@ -39,13 +40,16 @@ const Login = ({ navigation }: SignInScreenProps) => {
     checkLogin();
   }, []);
 
-
   return (
     <Screen>
-      <Label>Log In</Label>
+      <Image
+        style={{ width: 100, height: 100, marginTop: -50, marginBottom: 20 }}
+        source={require('./../../assets/icon.png')}
+      />
+      <Label space={20}>Iniciar Sesión</Label>
       <Input
         value={username}
-        placeholder="Nombre de Usuario"
+        placeholder="Correo electrónico"
         onChangeText={value => setSate({ password, username: value })}
       />
       <Input

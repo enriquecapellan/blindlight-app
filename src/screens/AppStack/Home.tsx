@@ -1,4 +1,5 @@
 import React from 'react';
+import { Image } from 'react-native';
 
 import Screen from './../../components/screen';
 import Button from './../../components/button';
@@ -18,10 +19,9 @@ const Home = ({ navigation }: HomeScreenProps) => {
 
   return (
     <Screen>
-      <Button
-        label="Información Geográfica"
-        type="PRIMARY"
-        onPress={() => navigation.navigate(MainRoutes.GeoInfo)}
+      <Image
+        style={{ width: 100, height: 100, marginTop: -25, marginBottom: 15 }}
+        source={require('./../../assets/icon.png')}
       />
       <Button
         label="Visión"
@@ -29,14 +29,9 @@ const Home = ({ navigation }: HomeScreenProps) => {
         onPress={() => navigation.navigate(MainRoutes.Vision)}
       />
       <Button
-        label="Ayuda"
+        label="Lugares Cercanos"
         type="PRIMARY"
-        onPress={() => navigation.navigate(MainRoutes.HelpMe)}
-      />
-      <Button
-        label="Configuración"
-        type="SECONDARY"
-        onPress={() => navigation.navigate(MainRoutes.Settings)}
+        onPress={() => navigation.navigate(MainRoutes.GeoInfo)}
       />
       <Button
         label="Salir"

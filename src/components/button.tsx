@@ -29,7 +29,7 @@ const Button: React.FC<TButtonProps> = ({ label, type, onPress }) => {
 const Wrapper = styled(TouchableOpacity)<{ type?: ButtonType }>`
   height: 54px;
   width: 90%;
-  margin: 8px 0;
+  margin: 20px 0;
   display: flex;
   justify-content: center;
   align-items: center;
