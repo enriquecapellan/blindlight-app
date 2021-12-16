@@ -25,6 +25,7 @@
     "react-native-camera": "^4.2.1",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.9.0",
+    "react-native-toast-notifications": "^3.2.3",
     "react-native-tts": "^4.1.0",
     "styled-components": "^5.3.3",
     "tsconfig-paths-webpack-plugin": "^3.5.2"

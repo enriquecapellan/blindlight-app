@@ -27,3 +27,12 @@ type StopLoading = {
 };
 
 type AuthActions = RestoreToken | SignIn | SignOut | StartLoading | StopLoading;
+
+type AppState = {
+  vision: {
+    generate_description: boolean;
+    extract_labels: boolean;
+    extract_text: boolean;
+    activateFlash: boolean;
+  };
+};

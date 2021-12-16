@@ -20,6 +20,7 @@ type SignInScreenProps = {
 
 const Login = ({ navigation }: SignInScreenProps) => {
   const [, dispatch] = useAuth();
+  const [isLoading, setLoading] = useState(false);
 
   const [{ username, password }, setSate] = useState({
     username: '',
@@ -27,7 +28,12 @@ const Login = ({ navigation }: SignInScreenProps) => {
   });
 
   async function handleLogin() {
-    signIn(username, password, dispatch);
+    setLoading(true);
+    try {
+      await signIn(username, password, dispatch);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -58,7 +64,7 @@ const Login = ({ navigation }: SignInScreenProps) => {
         placeholder="Contraseña"
         onChangeText={value => setSate({ username, password: value })}
       />
-      <Button label="Entrar" type="PRIMARY" onPress={handleLogin} />
+      <Button isLoading={isLoading} label="Entrar" type="PRIMARY" onPress={handleLogin} />
       <Button
         label="Registrarse"
         onPress={() => navigation.navigate(MainRoutes.SignUp)}

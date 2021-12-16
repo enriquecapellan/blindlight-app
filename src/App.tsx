@@ -4,11 +4,15 @@ import { SafeAreaView, StyleSheet } from 'react-native';
 import AuthProvider from './context/auth';
 import MainNavigation from './navigation/MainNavigation';
 
+import AppProvider from './context/app';
+
 const App = () => {
   return (
     <SafeAreaView style={styles.container}>
       <AuthProvider>
-        <MainNavigation />
+        <AppProvider>
+          <MainNavigation />
+        </AppProvider>
       </AuthProvider>
     </SafeAreaView>
   );

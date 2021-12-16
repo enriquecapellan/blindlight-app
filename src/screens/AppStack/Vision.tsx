@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 
 import { RNCamera } from 'react-native-camera';
 
 import speak from '../../utils/speech';
 
-import { getImageLabels, describeImage, getImageText } from './../../api';
+import { analyzeImage } from './../../api';
 
 import Label from './../../components/label';
+import { AppContext } from '../../context/app';
 
 const Vision = () => {
+  const appState = useContext(AppContext);
+
   const [loading, setLoading] = useState(false);
 
   const [text, setText] = useState('Identificar');
@@ -27,26 +30,39 @@ const Vision = () => {
           try {
             setText('Identificando');
             setLoading(true);
-            const descResponse = await describeImage(file.result);
-            const description = descResponse.data;
-            const textResponse = await getImageText(file.result);
-            let text = textResponse.data.TextDetections.filter(
-              (detc: any) => detc.Type == 'LINE',
-            )
-              .map((detc: any) => detc.DetectedText)
-              .join(', ');
-            const labelsResponse = await getImageLabels(file.result);
-            const labels = labelsResponse.data.join(', ');
-            text = text && `Texto: ${text}`;
 
-            const sentence = `${description}. Objetos: ${labels}. ${text}`;
-            // setText(sentence);
+            const { generate_description, extract_labels, extract_text } =
+              (appState && appState[0].vision) || {};
+
+            const response = await analyzeImage({
+              image: file.result,
+              generate_description,
+              extract_labels,
+              extract_text,
+            });
+            const { data } = response;
+
+            console.log(data)
+            console.log(response)
+
+            let { description, text, labels } = data;
+
+            text = text
+              ? text.TextDetections.filter((detc: any) => detc.Type == 'LINE')
+                  .map((detc: any) => detc.DetectedText)
+                  .join(', ')
+              : '';
+
+            labels = labels && `Objetos: ${labels.join(', ')}.`;
+            text = text.trim() && `Texto: ${text}`;
+
+            const sentence = `${description || ''} ${labels} ${text}`;
             speak(sentence, () => setText('Identificar'));
           } catch (error) {
             setText('Ha ocurrido un error.');
             console.log(error);
           } finally {
-            setText('Identificar')
+            setText('Identificar');
             setLoading(false);
           }
         }

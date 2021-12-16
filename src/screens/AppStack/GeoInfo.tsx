@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, Linking, TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components';
 import Geolocation, {
   GeolocationResponse,
@@ -30,7 +30,7 @@ const GeoInfo = () => {
     setStatus('Obteniendo ubicación...');
     Geolocation.getCurrentPosition(
       position => {
-        setStatus('Ubicación obtenida, cargando información...');
+        setStatus('Cargando lugares cercanos...');
         setLocation(position);
       },
       error => {
@@ -45,16 +45,19 @@ const GeoInfo = () => {
   };
 
   useEffect(() => {
-    async function fetchPlaces(location: GeolocationResponse) {
-      const { data } = await get_nearby_places(
-        location.coords.latitude,
-        location.coords.longitude,
-      );
-      setPlaces(data.slice(1));
-      setStatus('loaded');
-    }
+    if (status != 'loaded') {
 
-    location && fetchPlaces(location);
+      async function fetchPlaces(location: GeolocationResponse) {
+        const { data } = await get_nearby_places(
+          location.coords.latitude,
+          location.coords.longitude,
+        );
+        setPlaces(data.slice(1));
+        setStatus('loaded');
+      }
+  
+      location && fetchPlaces(location);
+    }
   }, [location]);
 
   useEffect(() => {
@@ -71,7 +74,7 @@ const GeoInfo = () => {
     separators: any;
   }) => {
     return (
-      <Item>
+      <Item onPress={() => Linking.openURL(`https://www.google.com/maps/dir/?api=1&origin=${location.coords.latitude},${location.coords.longitude}&destination=18.2917864,-70.3454059&travelmode=walking`)}>
         <Label>
           {`${item.name}.
 ${item.location && `Ubicación: ${item.location}.`}
@@ -102,7 +105,7 @@ ${item.opening_hours?.open_now ? 'Abierto Ahora.' : ''}
   );
 };
 
-const Item = styled(View)`
+const Item = styled(TouchableOpacity)`
   display: flex;
   align-items: flex-start;
   width: 100%;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 
 import Label from './label';
@@ -8,6 +8,8 @@ type TButtonProps = {
   label: string;
   onPress?: () => void;
   type?: ButtonType;
+  isLoading?: boolean;
+  isDisabled?: boolean;
 };
 
 type ButtonType =
@@ -18,10 +20,20 @@ type ButtonType =
   | 'WARNING'
   | 'INFO';
 
-const Button: React.FC<TButtonProps> = ({ label, type, onPress }) => {
+const Button: React.FC<TButtonProps> = ({
+  label,
+  type,
+  isLoading,
+  isDisabled,
+  onPress,
+}) => {
   return (
-    <Wrapper type={type} onPress={onPress}>
-      <Label type={type}>{label}</Label>
+    <Wrapper
+      type={type}
+      onPress={() => {
+        !isDisabled && !isDisabled && onPress && onPress();
+      }}>
+      <Label type={type}>{isLoading ? <ActivityIndicator /> : label}</Label>
     </Wrapper>
   );
 };

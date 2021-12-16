@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
 
 import Screen from './../../components/screen';
 import Switch from './../../components/switch';
 
+import { AppContext } from './../../context/app';
+
 const Settings = () => {
-  const [state, setSate] = useState({
-    readText: true,
-    generateDescription: true,
-    extractObjects: true,
-  });
+  const [{ vision }, setState] = useContext(AppContext);
 
   return (
     <Screen>
@@ -19,28 +17,34 @@ const Settings = () => {
           <Switch
             fullWidth
             label="Generar descripción"
-            value={state.generateDescription}
+            value={vision.generate_description}
             onToggle={value =>
-              setSate({ ...state, generateDescription: value })
+              setState({ vision: { ...vision, generate_description: value } })
             }
           />
           <Switch
             fullWidth
             label="Identificar objetos"
-            value={state.extractObjects}
-            onToggle={value => setSate({ ...state, extractObjects: value })}
+            value={vision.extract_labels}
+            onToggle={value =>
+              setState({ vision: { ...vision, extract_labels: value } })
+            }
           />
           <Switch
             fullWidth
             label="Leer Texto"
-            value={state.readText}
-            onToggle={value => setSate({ ...state, readText: value })}
+            value={vision.extract_text}
+            onToggle={value =>
+              setState({ vision: { ...vision, extract_text: value } })
+            }
           />
           <Switch
             fullWidth
             label="Activar Flash"
-            value={state.readText}
-            onToggle={value => setSate({ ...state, readText: value })}
+            value={vision.activateFlash}
+            onToggle={value =>
+              setState({ vision: { ...vision, activateFlash: value } })
+            }
           />
         </Content>
       </Wrapper>
