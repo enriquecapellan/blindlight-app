@@ -19,6 +19,12 @@ type Place = {
     open_now?: boolean;
   };
   types: string[];
+  geometry: {
+    location: {
+      lat: number;
+      lng: number;
+    };
+  };
 };
 
 const GeoInfo = () => {
@@ -46,7 +52,6 @@ const GeoInfo = () => {
 
   useEffect(() => {
     if (status != 'loaded') {
-
       async function fetchPlaces(location: GeolocationResponse) {
         const { data } = await get_nearby_places(
           location.coords.latitude,
@@ -55,7 +60,7 @@ const GeoInfo = () => {
         setPlaces(data.slice(1));
         setStatus('loaded');
       }
-  
+
       location && fetchPlaces(location);
     }
   }, [location]);
@@ -73,8 +78,15 @@ const GeoInfo = () => {
     index: number;
     separators: any;
   }) => {
+    const { lat, lng } = item.geometry.location;
+    const { latitude, longitude } = location?.coords || {}
     return (
-      <Item onPress={() => Linking.openURL(`https://www.google.com/maps/dir/?api=1&origin=${location.coords.latitude},${location.coords.longitude}&destination=18.2917864,-70.3454059&travelmode=walking`)}>
+      <Item
+        onPress={() =>
+          Linking.openURL(
+            `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${lat},${lng}&travelmode=walking`,
+          )
+        }>
         <Label>
           {`${item.name}.
 ${item.location && `Ubicación: ${item.location}.`}
