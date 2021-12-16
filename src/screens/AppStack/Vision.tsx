@@ -28,7 +28,7 @@ const Vision = () => {
       file.onloadend = async () => {
         if (typeof file.result == 'string') {
           try {
-            setText('Identificando');
+            speak('Identificando');
             setLoading(true);
 
             const { generate_description, extract_labels, extract_text } =
@@ -42,9 +42,6 @@ const Vision = () => {
             });
             const { data } = response;
 
-            console.log(data)
-            console.log(response)
-
             let { description, text, labels } = data;
 
             text = text
@@ -56,13 +53,12 @@ const Vision = () => {
             labels = labels && `Objetos: ${labels.join(', ')}.`;
             text = text.trim() && `Texto: ${text}`;
 
-            const sentence = `${description || ''} ${labels} ${text}`;
-            speak(sentence, () => setText('Identificar'));
+            const sentence = `${description || ''}. ${labels} ${text}`;
+            speak(sentence);
           } catch (error) {
             setText('Ha ocurrido un error.');
             console.log(error);
           } finally {
-            setText('Identificar');
             setLoading(false);
           }
         }
@@ -77,7 +73,8 @@ const Vision = () => {
   };
 
   return (
-    <Camera>
+    <Camera
+      flashMode={appState && appState[0].vision.activateFlash ? RNCamera.Constants.FlashMode.on : RNCamera.Constants.FlashMode.off}>
       {({ camera }) => (
         <Button disabled={loading} onPress={() => takePicture(camera)}>
           <Label>{text}</Label>

@@ -9,6 +9,7 @@ import { ScreenWrapper } from './../../components/screen';
 import Label from './../../components/label';
 
 import { get_nearby_places } from '../../api';
+import speak from './../../utils/speech';
 
 type Place = {
   name: string;
@@ -80,20 +81,23 @@ const GeoInfo = () => {
   }) => {
     const { lat, lng } = item.geometry.location;
     const { latitude, longitude } = location?.coords || {}
+
+    const placeDescription = `${item.name}.
+${item.location && `Ubicación: ${item.location}.`}
+${item.types?.length && `Tipo: ${item.types.join(', ')}.`}
+${item.rating && `Puntuación: ${item.rating}.`}
+${item.opening_hours?.open_now ? 'Abierto Ahora.' : ''}
+    `
     return (
       <Item
-        onPress={() =>
+        onPress={() => speak(placeDescription)}
+      onLongPress={() =>
           Linking.openURL(
             `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${lat},${lng}&travelmode=walking`,
           )
         }>
         <Label>
-          {`${item.name}.
-${item.location && `Ubicación: ${item.location}.`}
-${item.types?.length && `Tipo: ${item.types.join(', ')}.`}
-${item.rating && `Puntuación: ${item.rating}.`}
-${item.opening_hours?.open_now ? 'Abierto Ahora.' : ''}
-`}
+          {placeDescription}
         </Label>
       </Item>
     );
